@@ -1,15 +1,17 @@
 <?php
 namespace lib\db;
 
+use lib\config\KeyValueStore;
+
 /**
  * Get or set the database configuration. If an array is passed as argument, it
  * will set the configuration to that array and return the previous config,
  * otherwise if no argument is passed, the current configuration is returned.
  *
- * @param object $options An optional options object to set
+ * @param KeyValueStore $options An optional options object to set
  * @return object The current options object
  */
-function configuration(object $options = null): ?object {
+function configuration(KeyValueStore $options = null): ?KeyValueStore {
     static $config = null;
     if ($options === null) {
         return $config;

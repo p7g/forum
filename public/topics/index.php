@@ -1,9 +1,11 @@
 <?php
-require '../../index.php';
+require \dirname($_SERVER['DOCUMENT_ROOT']) . '/index.php';
 
 use lib\http;
 use lib\http\{Request, Response};
 use lib\view;
+
+configure();
 
 http\handle(new class implements http\GETHandler, http\POSTHandler {
     public function get(Request $request, Response $response): void {
