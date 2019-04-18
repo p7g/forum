@@ -6,11 +6,11 @@ namespace lib\db;
  * will set the configuration to that array and return the previous config,
  * otherwise if no argument is passed, the current configuration is returned.
  *
- * @param array|null $options An optional array of arguments to set
- * @return array The current array of options
+ * @param object $options An optional options object to set
+ * @return object The current options object
  */
-function configuration(?array $options = null): array {
-    static $config = [];
+function configuration(object $options = null): ?object {
+    static $config = null;
     if ($options === null) {
         return $config;
     }
@@ -20,13 +20,13 @@ function configuration(?array $options = null): array {
 }
 
 /**
- * Connect to the database. This function should not need to be called, as a
- * connection will be made lazily when needed.
+ * Connect to the database. This function should not need to be called directly,
+ * as a connection will be made lazily when needed.
  *
- * @param array $options An optional array of options for the connection.
+ * @param object $options An optional options object for the connection.
  * @return \PDO A database connection
  */
-function connect(array $options = []): \PDO {
+function connect(object $options = null): \PDO {
 
 }
 
@@ -44,6 +44,7 @@ function get_connection(): \PDO {
     }
 
     $connection = connect(configuration());
+    return $connection;
 }
 
 /**
