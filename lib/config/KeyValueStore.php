@@ -2,6 +2,7 @@
 namespace lib\config;
 
 use lib\json;
+use function lib\import\import;
 
 /**
  * A class for storing key-value pairs with checked lookups.
@@ -14,10 +15,21 @@ class KeyValueStore {
      * Populate the config array from a JSON file
      *
      * @param string $filename The name of the file to load
-     * @return void
+     * @return KeyValueStore
      */
     public static function from_json(string $filename) {
         return new static(json\parse_file($filename, true));
+    }
+
+    /**
+     * Populate the config from a PHP file. The file should return an array of
+     * configuration data.
+     *
+     * @param string $filename The name of the file to import
+     * @return KeyValueStore
+     */
+    public static function import(string $filename) {
+        return new static(import($filename));
     }
 
     /**
