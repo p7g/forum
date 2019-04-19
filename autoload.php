@@ -26,6 +26,7 @@ const FUNCTION_FILES = [
     'db',
     'http',
     'import',
+    'iter',
     'json',
     'view',
 ];
