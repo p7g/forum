@@ -7,7 +7,7 @@ use lib\config\KeyValueStore;
 
 function configure(): void {
     try {
-        db\configuration(KeyValueStore::from_json(__DIR__ . '/config/db.json'));
+        db\configuration(KeyValueStore::import(__DIR__ . '/config/db.php'));
     } catch(\Throwable $e) {
         \error_log('Missing required database configuration file');
         exit(1);
