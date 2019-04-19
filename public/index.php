@@ -32,7 +32,11 @@ http\handle(new class implements http\GETHandler, http\POSTHandler {
         global $seed_hullo, $query_hullo;
         $result = db\transact(function () use ($seed_hullo, $query_hullo) {
             db\execute($seed_hullo);
-            return iter\collect(db\query_all($query_hullo));
+            return db\query_all($query_hullo);
+        });
+
+        $result = iter\map($result, function ($row) {
+            return "{$row['id']}: {$row['text']}";
         });
 
         view\render('../view/home', (object) [

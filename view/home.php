@@ -35,5 +35,13 @@ form.addEventListener('submit', async (e) => {
 </script>
 
 <pre>
-<?php var_dump($this->request) ?>
+<?php
+if (\is_iterable($this->request)) {
+    foreach ($this->request as $thing) {
+        echo $thing, PHP_EOL;
+    }
+} else {
+    var_dump($this->request);
+}
+?>
 </pre>
