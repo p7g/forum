@@ -1,9 +1,11 @@
 <?php
 namespace lib\import;
 
-function import(string $name) {
-    if (\file_exists($name)) {
-        return require $name;
+function import(string $__name) {
+    if (!\file_exists($__name)) {
+        $__name .= '.php';
     }
-    return require "$name.php";
+    return (function () use ($__name) {
+        return require $__name;
+    })();
 }
