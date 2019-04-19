@@ -61,9 +61,9 @@ function get_connection(): \PDO {
  * @param callable $fn The function to execute within the transaction.
  * @param bool $suppress Suppress anything thrown by the given callable. By
  * default this value is false (Errors and Exceptions are rethrown)
- * @return void
+ * @return mixed The return value of the given callable or null if failed
  */
-function transaction(callable $fn, bool $suppress = false): void {
+function transact(callable $fn, bool $suppress = false) {
     $connection = get_connection();
 
     if ($connection->inTransaction()) {
@@ -72,8 +72,9 @@ function transaction(callable $fn, bool $suppress = false): void {
 
     $connection->beginTransaction();
     try {
-        $fn();
+        $result = $fn();
         $connection->commit();
+        return $result;
     } catch (\Throwable $e) {
         $connection->rollBack();
         if (!$suppress) {
