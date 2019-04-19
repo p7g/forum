@@ -1,6 +1,6 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 function parentdir() {
-  CURRENT="$(cd $(dirname $0) && pwd)"
+  CURRENT="$(cd $(dirname "$0") && pwd)"
   echo "$(dirname "$CURRENT")"
 }
