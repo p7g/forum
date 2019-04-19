@@ -9,7 +9,8 @@ function configure(): void {
     try {
         db\configuration(KeyValueStore::import(__DIR__ . '/config/db.php'));
     } catch(\Throwable $e) {
-        \error_log('Missing required database configuration file');
+        \error_log('Failed to load database configuration file');
+        \error_log($e->__toString());
         exit(1);
     }
 }
