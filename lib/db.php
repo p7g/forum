@@ -83,19 +83,45 @@ function transact(callable $fn, bool $suppress = false) {
     }
 }
 
+function _statement_handle_error(\PDOStatement $stmt, string $method,
+                                    ...$args) {
+    $result = [$stmt, $method](...$args);
+    if ($result === false && $stmt->errorCode() !== '00000') {
+        $error = $stmt->errorInfo();
+        throw new \Exception(\implode(' - ', $error));
+    }
+    return $result;
+}
+
+function prepare(string $sql): \PDOStatement {
+    return get_connection()->prepare($sql);
+}
+
+/**
+ * Execute an SQL query, ignoring the result
+ *
+ * @param PDOStatement $stmt The statement to execute
+ * @param array $params An array of values to replace the placeholders in the
+ * query
+ * @return void
+ */
+function execute(\PDOStatement $stmt, array $params = []): void {
+    _statement_handle_error($stmt, 'execute', $params);
+}
+
 /**
  * Query the database, expecting a single row.
  *
  * @param string $sql The query to execute.
  * @param array $params An array of values to replace the placeholders in the
  * query.
+ * @param int $style The optional fetch style for the query
  * @return array The found row from the database.
  */
-function query(string $sql, array $params = [],
-               int $style = \PDO::FETCH_LAZY): array {
-    $statement = get_connection()->prepare($sql);
-    $statement->execute($params);
-    return $statement->fetch(\PDO::FETCH_LAZY);
+function query(\PDOStatement $stmt, array $params = [],
+                int $style = \PDO::FETCH_ASSOC): ?array {
+    $stmt->execute($params);
+    return _statement_handle_error($stmt, 'fetch', \PDO::FETCH_LAZY);
 }
 
 /**
@@ -105,13 +131,13 @@ function query(string $sql, array $params = [],
  * @param array $params The parameters corresponding to those used in the query
  * @return iterable
  */
-function query_all(string $sql, array $params = []): iterable {
-    $statement = get_connection()->prepare($sql);
-    $statement->execute($params);
+function query_all(\PDOStatement $stmt, array $params = [],
+                    int $style = \PDO::FETCH_ASSOC): iterable {
+    $stmt->execute($params);
 
-    while ($value = $statement->fetch(\PDO::FETCH_LAZY)) {
+    while ($value = _statement_handle_error($stmt, 'fetch', $style)) {
         yield $value;
     }
 
-    return $statement->rowCount();
+    return $stmt->rowCount();
 }
