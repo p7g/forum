@@ -4,7 +4,7 @@ namespace lib\config;
 use lib\json;
 
 /**
- * An abstract class for storing a global configuration
+ * A class for storing key-value pairs with checked lookups.
  */
 class KeyValueStore {
     /** @var array */
@@ -27,6 +27,15 @@ class KeyValueStore {
      */
     public function __construct(array $initial = []) {
         $this->config = $initial;
+    }
+
+    /**
+     * Get entire inner array
+     *
+     * @return array An associative array
+     */
+    public function all(): array {
+        return $this->config;
     }
 
     /**

@@ -8,8 +8,8 @@ use lib\config\KeyValueStore;
  * will set the configuration to that array and return the previous config,
  * otherwise if no argument is passed, the current configuration is returned.
  *
- * @param KeyValueStore $options An optional options object to set
- * @return object The current options object
+ * @param \lib\config\KeyValueStore $options An optional key-value store to set
+ * @return object The current key-value store
  */
 function configuration(KeyValueStore $options = null): ?KeyValueStore {
     static $config = null;
@@ -25,11 +25,14 @@ function configuration(KeyValueStore $options = null): ?KeyValueStore {
  * Connect to the database. This function should not need to be called directly,
  * as a connection will be made lazily when needed.
  *
- * @param object $options An optional options object for the connection.
  * @return \PDO A database connection
  */
-function connect(object $options = null): \PDO {
-
+function connect(): \PDO {
+    $config = configuration();
+    $dsn = $config->get('dsn');
+    $username = $config->get('username');
+    $password = $config->get('password');
+    return new \PDO($dsn, $username, $password, $config->all());
 }
 
 /**
