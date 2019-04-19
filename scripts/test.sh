@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 source "$(dirname "$0")/utils.sh"
 

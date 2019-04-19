@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 USAGE="USAGE: $0 [-p <port>] [-h <host>]"
 
@@ -23,11 +23,6 @@ while getopts ':p:h:' opt; do
       exit 1;;
   esac
 done
-
-echo $HOST
-echo $PORT
-
-exit 0
 
 OLD_PWD="$PWD"
 cd "$(parentdir "$0")/public"
