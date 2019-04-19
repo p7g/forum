@@ -23,6 +23,7 @@ function autoloader(string $prefix, string $directory): \Closure {
 
 const FUNCTION_FILES = [
     'config',
+    'console',
     'db',
     'http',
     'import',
