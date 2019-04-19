@@ -1,5 +1,5 @@
 <?php
-require \dirname($_SERVER['DOCUMENT_ROOT']) . '/index.php';
+require \dirname($_SERVER['DOCUMENT_ROOT']) . '/configure.php';
 
 use lib\db;
 use lib\http;
