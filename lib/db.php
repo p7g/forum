@@ -110,6 +110,15 @@ function execute(\PDOStatement $stmt, array $params = []): void {
 }
 
 /**
+ * Get the ID of the last inserted row
+ *
+ * @return int
+ */
+function last_insert_id(): int {
+    return get_connection()->lastInsertId();
+}
+
+/**
  * Query the database, expecting a single row.
  *
  * @param string $sql The query to execute.
