@@ -93,8 +93,32 @@ function _statement_handle_error(\PDOStatement $stmt, string $method,
     return $result;
 }
 
+/**
+ * Prepare an sql query that can be executed many times with different input
+ * parameters
+ *
+ * @param string $sql The SQL string to prepare
+ * @return \PDOStatement
+ */
 function prepare(string $sql): \PDOStatement {
     return get_connection()->prepare($sql);
+}
+
+/**
+ * Get a closure that will prepare an sql query lazily
+ *
+ * @param string $sql The SQL string to prepare
+ * @return callable
+ */
+function lazy_prepare(string $sql): callable {
+    return function () use ($sql): \PDOStatement {
+        static $stmt = null;
+        if ($stmt !== null) {
+            return $stmt;
+        }
+        $stmt = prepare($sql);
+        return $stmt;
+    };
 }
 
 /**
