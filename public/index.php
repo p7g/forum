@@ -7,46 +7,21 @@ use lib\http\{Request, Response};
 use lib\iter;
 use lib\view;
 
+use forum\db\users;
+use forum\models\User;
+
 configure();
-
-$create_hullo = db\prepare(<<<SQL
-    CREATE TABLE IF NOT EXISTS hullo (
-        id INTEGER PRIMARY KEY,
-        text TEXT
-    );
-SQL
-);
-db\execute($create_hullo);
-
-$seed_hullo = db\prepare(<<<SQL
-    INSERT INTO hullo (text)
-    VALUES
-        ('test'),
-        ('hullo');
-SQL
-);
-$query_hullo = db\prepare("SELECT * FROM hullo");
 
 http\handle(new class implements http\GETHandler, http\POSTHandler {
     public function get(Request $request, Response $response): void {
-        global $seed_hullo, $query_hullo;
-        $result = db\transact(function () use ($seed_hullo, $query_hullo) {
-            db\execute($seed_hullo);
-            return db\query_all($query_hullo);
-        });
-
-        $result = iter\map($result, function ($row) {
-            return "{$row['id']}: {$row['text']}";
-        });
-
-        view\render('../view/home', (object) [
-            'thing' => $request->get_query('thing'),
-            'request' => $result,
+        view\render('../views/users', (object) [
+            'users' => users\get_all(),
         ]);
     }
 
     public function post(Request $request, Response $response): void {
-        $body = $request->json();
-        echo \json_encode($body);
+        $user = $_POST;
+        users\create(User::from_array($user));
+        header('Location: /');
     }
 });
