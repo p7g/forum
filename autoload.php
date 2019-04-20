@@ -22,16 +22,17 @@ function autoloader(string $prefix, string $directory): \Closure {
 \spl_autoload_register(autoloader('forum', __DIR__));
 
 const FUNCTION_FILES = [
-    'config',
-    'console',
-    'db',
-    'http',
-    'import',
-    'iter',
-    'json',
-    'view',
+    'lib/config',
+    'lib/console',
+    'lib/db',
+    'lib/http',
+    'lib/import',
+    'lib/iter',
+    'lib/json',
+    'lib/view',
+    'db/users',
 ];
 
 foreach (FUNCTION_FILES as $file) {
-    require "lib/$file.php";
+    require "$file.php";
 }
