@@ -31,6 +31,7 @@ const FUNCTION_FILES = [
     'lib/json',
     'lib/view',
     'db/users',
+    'views',
 ];
 
 foreach (FUNCTION_FILES as $file) {
